@@ -1,0 +1,28 @@
+﻿CREATE proc sp_UsuarioInsert
+(
+	@Email nvarchar(80),
+	@Password nvarchar(80),
+	@RolId int,
+	@EstadoId int
+)
+as begin
+	INSERT INTO Usuarios (Email,Password,RolId,EstadoId)
+	VALUES(@Email,ENCRYPTBYPASSPHRASE('jg01', @Password),@RolId,@EstadoId)
+end
+
+
+exec sp_UsuarioInsert 'admin01@gmail.com', '123.', 1,1
+
+
+
+alter proc spLogin
+(
+	@Email nvarchar(80),
+	@Password nvarchar(80)
+)
+as 
+begin
+	SELECT * FROM Usuarios WHERE Email =@Email AND
+	DECRYPTBYPASSPHRASE('jg01', Password) =@Password
+end
+
